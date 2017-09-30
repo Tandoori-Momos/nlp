@@ -40,6 +40,10 @@ function dist(_source, _target) {
 }
 
 var words;
+var measure1 = 0, measure2 = 0;
+var sum = 0;
+
+
 
 // Check measure of words of query and results
 var exp = function (_source, _target) {
@@ -57,26 +61,38 @@ var exp = function (_source, _target) {
 
     var _word = words[j];
 
-    tfidf.tfidfs(_word, function(i, measure) {
-      console.log(_word + ' ----- document #' + i + ' is ' + measure);
-    });
+    var measure = tfidf.tfidf(_word, 0);
+    measure1 += Number(measure);
+    console.log('Measure of ' + _word + ' is ' + measure);
+    console.log("Measure is " + measure1);
+
   }
 
       console.log('\n' + '**************** Loop 2 *****************'+ '\n');
 
-  // Evaluate second string
+  // Evaluate second string for words of string 1
   for(var k = 0; k <= words.length - 1; k++)
   {
     console.log('----------------------------------------------');
+    var _word2 = words[k];
+    var _measure = tfidf.tfidf(_word2, 1);
+    measure2 += Number(_measure);
+    console.log('Measure of ' + _word2 + ' is ' + _measure);
+    console.log("Measure is " + measure2);
+  }
 
-    var _word2 = words2[k];
 
-    tfidf.tfidfs(_word2, function(i, measure) {
-      console.log(_word2 + '----- document #' + i + ' is ' + measure);
-    });
+  var diff = (measure1 > measure2) ? measure1 - measure2 : measure2 - measure1;
+  console.log('\n' + '-----------------------------------');
+  console.log("\n" + "Difference is " + diff);
+
+  // Get Difference between total measures
+  if (diff > 3) {
+
+    console.log("WE THINK THIS NEWS IS FAKE");
   }
 
 
 }
 
-exp("Akshay kumar new movie", "New movie by akshay kumar");
+exp("modi releases 16000 crore electricity plan", "lol aaryak is very noob");
