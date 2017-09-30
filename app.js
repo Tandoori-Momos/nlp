@@ -7,6 +7,8 @@
 
 const express = require('express');
 
+const nlp = require('compromise');
+
 const natural = require('natural'); // NLP Module
 
 const tokenizer = natural.WordTokenizer(); // Splits words into an array
@@ -46,7 +48,10 @@ var sum = 0;
 
 
 // Check measure of words of query and results
-var exp = function (_source, _target) {
+var exp = function (pre_source, pre_target) {
+  // Remove whitespace, case, punctuation, contractions and values
+  var _source = nlp(pre_source).normalize().out('text');
+  var _target = nlp(pre_target).normalize().out('text');
   words = _source.split(" "); // Array of words
   words2 = _target.split(" "); // Array of words
 
@@ -87,7 +92,7 @@ var exp = function (_source, _target) {
   console.log("\n" + "Difference is " + diff);
 
   // Get Difference between total measures
-  if (diff > 3) {
+  if (diff > words.length / 2) {
 
     console.log("WE THINK THIS NEWS IS FAKE");
   }
