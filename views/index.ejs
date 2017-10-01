@@ -5,8 +5,19 @@
     <title></title>
     <script src="jquery.js" charset="utf-8"></script>
     <script src="search.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
-    <h1> hi </h1>
+    <input type="text" id = "search" placeholder = "Search...">
+    <button type="button" id="bt">Submit</button>
   </body>
 </html>
+
+<script type="text/javascript">
+$('#bt').click( function() {
+  var str = $('#search').val();
+
+  check(str);
+  console.log('ok');
+});
+</script>
