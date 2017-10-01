@@ -5,6 +5,7 @@
  * @Last modified time: 30-09-2017
  */
 
+
 const express = require('express');
 
 const nlp = require('compromise');
@@ -20,13 +21,16 @@ var tfidf = new TfIdf();
 
 const app = express();
 
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
 
 const server = app.listen(8080, function() {
   console.log('Listening to port ' + server.address().port);
 });
 
 app.get('/', function(req,res) {
-  res.send('Natural!');
+  res.render('index');
 });
 
 var str = "Exunclan loses"; // search query
@@ -36,15 +40,27 @@ var str = "Exunclan loses"; // search query
 
 function dist(_source, _target) {
   // Returns value between 0 and 1
-  var diff = natural.JaroWinklerDistance(_source, _target);
+  var dist = natural.JaroWinklerDistance(_source, _target);
 
-  console.log("Score: " + diff);
+  console.log('\n' + '------------ Dist ---------------');
+  console.log("Distance is: " + dist);
+  console.log('---------------------------------');
 }
 
 var words;
 var measure1 = 0, measure2 = 0;
 var sum = 0;
 
+
+var headlines = [];
+var req_local;
+var score = 0, item;
+
+function check(req) {
+
+}
+
+check('hi i am yash');
 
 
 // Check measure of words of query and results
@@ -92,12 +108,10 @@ var exp = function (pre_source, pre_target) {
   console.log("\n" + "Difference is " + diff);
 
   // Get Difference between total measures
-  if (diff > words.length / 2) {
+  if (diff > words.length / 2 - 0.1) {
 
     console.log("WE THINK THIS NEWS IS FAKE");
   }
 
 
 }
-
-exp("modi releases 16000 crore electricity plan", "lol aaryak is very noob");
