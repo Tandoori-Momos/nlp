@@ -8,7 +8,10 @@
 
 const express = require('express');
 
+var bodyParser = require('body-parser');
+
 const nlp = require('compromise');
+
 
 const natural = require('natural'); // NLP Module
 
@@ -21,6 +24,8 @@ var tfidf = new TfIdf();
 
 const app = express();
 
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -29,11 +34,49 @@ const server = app.listen(8080, function() {
   console.log('Listening to port ' + server.address().port);
 });
 
+var str; // search query
+var headlines = [];
+var calc,total = 0;
+
 app.get('/', function(req,res) {
   res.render('index');
 });
 
-var str = "Exunclan loses"; // search query
+app.post('/', urlencodedParser, function(req,res) {
+
+
+  var sources = req.body.arr;
+
+  var arr = JSON.parse(sources);
+
+  console.log(sources);
+
+  console.log(arr.length);
+
+  for(var i = 1; i < arr.length; i++)
+  {
+    str = arr[0];
+
+    calc = dist(str, arr[i]);
+
+    console.log('============ ' + calc + ' ==================');
+
+    total = total + calc;
+
+    console.log('============== ' + total + ' ===============');
+
+
+
+  }
+
+
+  if (total > 7.5) {
+    console.log('WE THINK THIS STORY IS TRUE');
+  } else {
+    console.log('WE THINK THIS STORY IS FAKE');
+  }
+});
+
 
 
 // Calculate the difference between query and results
@@ -45,6 +88,8 @@ function dist(_source, _target) {
   console.log('\n' + '------------ Dist ---------------');
   console.log("Distance is: " + dist);
   console.log('---------------------------------');
+
+  return dist;
 }
 
 var words;
